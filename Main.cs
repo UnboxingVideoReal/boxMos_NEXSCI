@@ -23,9 +23,6 @@ namespace boxMos_NEXSCI
 
         protected override void Initialize()
         {
-
-            Player player = new Player();
-
             base.Initialize();
         }
 
