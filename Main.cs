@@ -40,7 +40,7 @@ namespace boxMos_NEXSCI
         {
             
 
-            menu = new Menu(_spriteBatch, Content);
+            menu = new Menu(_spriteBatch, Content, rasterizerState);
             menu.Setup();
         }
 
@@ -58,8 +58,6 @@ namespace boxMos_NEXSCI
         {
             GraphicsDevice.Clear(Color.Black);
             // ui
-
-            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, rasterizerState);
 
             menu.Draw();
 

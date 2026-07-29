@@ -22,8 +22,8 @@ namespace boxMos_NEXSCI.Framework
         public float maxX;
         public float maxY;
 
-        public float Width => maxX - minX;
-        public float Height => maxY - minY;
+        public float Width => Math.Abs(maxX - minX);
+        public float Height => Math.Abs(maxY - minY);
 
         public bool Contains(Vector2 position)
         {
