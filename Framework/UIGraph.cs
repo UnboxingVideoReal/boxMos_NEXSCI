@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace boxMos_NEXSCI.Framework
 {
+
     public class UIGraph : UI
     {
         public Color Color = Color.White;
@@ -20,7 +21,10 @@ namespace boxMos_NEXSCI.Framework
         public Viewport2 ViewingWindow;
         public List<Vector2> Graph = new List<Vector2>();
         public Vector2 Bounds;
-        public UIGraph(UIContainer container, SpriteBatch spriteBatch, ContentManager content, Func<double, double> f, Vector2 bounds, Texture2D pixelTexture, float pixelSize, Texture2D gridTexture, Viewport2 viewWin, Rectangle rect, Vector2 angle, Color color, string name) : base(spriteBatch, content)
+        /// <summary>
+        /// zoom = 
+        /// </summary>
+        public UIGraph(UIContainer container, SpriteBatch spriteBatch, ContentManager content, Func<double, double> f, Vector2 bounds, Texture2D pixelTexture, float pixelSize, Texture2D gridTexture, Viewport2 viewWin, Rectangle rect, Vector2 angle, Color color, string name, List<Vector2> table) : base(spriteBatch, content)
         {
             Bounds = bounds;
             Texture = pixelTexture;
@@ -36,31 +40,50 @@ namespace boxMos_NEXSCI.Framework
             SpriteBatch = spriteBatch;
             Content = content;
             Container = container;
+            Graph = table;
 
-            SpriteBatch.GraphicsDevice.ScissorRectangle = Rect;
             CreateGraph(Graph, ViewingWindow, Texture, GridTexture, Rect, Angle, f, Bounds);
         }
         public void CreateGraph(List<Vector2> table, Viewport2 viewWin, Texture2D texture, Texture2D gridTexture, Rectangle rect, Vector2 angle, Func<double, double> f, Vector2 bounds)
         {
 
-            SpriteBatch.Draw(Main.pixelTexture, rect, null, new Color(10,10,10), (float)Math.Atan2(angle.Y, angle.X), Vector2.Zero, SpriteEffects.None, 0f);
+            SpriteBatch.Draw(Main.pixelTexture, rect, null, new Color(10, 10, 10), (float)Math.Atan2(angle.Y, angle.X), Vector2.Zero, SpriteEffects.None, 0f);
             //SpriteBatch.Draw(Main.pixelTexture, new Vector2(viewWin.minX, viewWin.minY), null, Color.Red, (float)Math.Atan2(angle.Y, angle.X), Vector2.Zero, PixelSize, SpriteEffects.None, 0f);
             //SpriteBatch.Draw(Main.pixelTexture, new Vector2(viewWin.maxX, viewWin.maxY), null, Color.Red, (float)Math.Atan2(angle.Y, angle.X), Vector2.Zero, PixelSize, SpriteEffects.None, 0f);
 
-            SpriteBatch.Draw(Main.pixelTexture, new Vector2(rect.X, 0) + new Vector2(rect.X, rect.Y) - new Vector2(viewWin.minX, -viewWin.minY) + new Vector2(-100, -PixelSize/2), null, Color.Red, 0f, new Vector2(0, 0), new Vector2(rect.Width*100, PixelSize), SpriteEffects.None, 0f);
-            SpriteBatch.Draw(Main.pixelTexture, new Vector2(rect.Height, -rect.Y) + new Vector2(rect.X, rect.Y) - new Vector2(viewWin.minX, -viewWin.minY) + new Vector2(-PixelSize/2, -100), null, Color.Blue, 0f, new Vector2(0, 0), new Vector2(PixelSize, rect.Height*100), SpriteEffects.None, 0f);
+            SpriteBatch.Draw(Main.pixelTexture, new Vector2(rect.X, 0) + new Vector2(rect.X, rect.Y) - new Vector2(viewWin.minX, -viewWin.minY) + new Vector2(-100, -PixelSize / 2), null, Color.Red, 0f, new Vector2(0, 0), new Vector2(rect.Width * 100, PixelSize), SpriteEffects.None, 0f);
+            SpriteBatch.Draw(Main.pixelTexture, new Vector2(rect.Height, -rect.Y) + new Vector2(rect.X, rect.Y) - new Vector2(viewWin.minX, -viewWin.minY) + new Vector2(-PixelSize / 2, -100), null, Color.Blue, 0f, new Vector2(0, 0), new Vector2(PixelSize, rect.Height * 100), SpriteEffects.None, 0f);
             SpriteBatch.Draw(Main.pixelTexture, new Vector2(rect.Right, rect.Top), null, Color.Red, (float)Math.Atan2(angle.Y, angle.X), Vector2.Zero, PixelSize, SpriteEffects.None, 0f);
 
-
-            for (int i = (int)float.Round(bounds.X); i < (int)float.Round(bounds.Y) + 1; i++) // viewWin.maxX
+            int BoundsX = (int)float.Round(bounds.X);
+            int BoundsY = (int)float.Round(bounds.Y) + 1;
+            if (table.Count > 0)
             {
-                Vector2 ourPos = new Vector2(i + viewWin.maxX, -(float)f(i)) + new Vector2(rect.X, rect.Y) - new Vector2(viewWin.minX, -viewWin.minY);
+                BoundsX = 0;
+                BoundsY = table.Count;
+            }
+            else
+            {
+                BoundsX = (int)float.Round(bounds.X);
+                BoundsY = (int)float.Round(bounds.Y) + 1;
+            }
+            for (int i = BoundsX; i < BoundsY; i++) // viewWin.maxX
+            {
+                Vector2 ourPos;
+                if (table.Count > 0)
+                {
+                    ourPos = new Vector2(table[i].X + viewWin.maxX, -(float)table[i].Y) + new Vector2(rect.X, rect.Y) - new Vector2(-viewWin.minX, -viewWin.minY);
+                }
+                else
+                {
+                    ourPos = new Vector2(i + viewWin.maxX, -(float)f(i)) + new Vector2(rect.X, rect.Y) - new Vector2(-viewWin.minX, -viewWin.minY);
+                }
                 if (rect.Contains(ourPos))
                 {
                     SpriteBatch.Draw(texture, ourPos, null, Color, (float)Math.Atan2(angle.Y, angle.X), Vector2.Zero, PixelSize, SpriteEffects.None, 0f);
                 }
             }
-            
+
         }
     }
 }
