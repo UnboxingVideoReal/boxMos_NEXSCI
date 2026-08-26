@@ -41,14 +41,14 @@ namespace boxMos_NEXSCI
             batch.End();
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, rasterizer);
             UIGraph graph = new(null, batch, content,
-                x => ((Math.Sin(x / 10) * 20) / Math.Pow(x,3))*20,
-                new Vector2(-100, 100),
+                x => Math.Tan(Math.Cos(x*Math.Sin(x))+interval),
+                new Vector2(-200,200),
                 Main.pixelTexture,
                 3f,
                 Main.pixelTexture,
-                new Viewport2(interval, interval, interval*2, interval*2),
+                new Viewport2(100, 100, 200, 200),
                 new Rectangle(100, 100, 200, 200), new Vector2(0, 0), Color.White, "x^2",
-                new List<Vector2>() { new Vector2(0, 0), new Vector2(10, 1) }/*, new List<Vector2>()*/);
+                new List<Vector2>());
         }
     }
 }

@@ -46,6 +46,15 @@ namespace boxMos_NEXSCI.Framework
         }
         public void CreateGraph(List<Vector2> table, Viewport2 viewWin, Texture2D texture, Texture2D gridTexture, Rectangle rect, Vector2 angle, Func<double, double> f, Vector2 bounds)
         {
+            float posX1;
+            float posY1;
+            float posX2;
+            float posY2;
+            float distanceBetween;
+
+            Vector2 pos1;
+            Vector2 pos2;
+            float angle2;
 
             SpriteBatch.Draw(Main.pixelTexture, rect, null, new Color(10, 10, 10), (float)Math.Atan2(angle.Y, angle.X), Vector2.Zero, SpriteEffects.None, 0f);
             //SpriteBatch.Draw(Main.pixelTexture, new Vector2(viewWin.minX, viewWin.minY), null, Color.Red, (float)Math.Atan2(angle.Y, angle.X), Vector2.Zero, PixelSize, SpriteEffects.None, 0f);
@@ -67,20 +76,32 @@ namespace boxMos_NEXSCI.Framework
                 BoundsX = (int)float.Round(bounds.X);
                 BoundsY = (int)float.Round(bounds.Y) + 1;
             }
+            Debug.WriteLine(BoundsX.ToString() + " " + BoundsY.ToString());
+
             for (int i = BoundsX; i < BoundsY; i++) // viewWin.maxX
             {
                 Vector2 ourPos;
                 if (table.Count > 0)
                 {
-                    ourPos = new Vector2(table[i].X + viewWin.maxX, -(float)table[i].Y) + new Vector2(rect.X, rect.Y) - new Vector2(-viewWin.minX, -viewWin.minY);
+                    ourPos = new Vector2(table[i].X, -(float)table[i].Y) + new Vector2(rect.X, rect.Y) - new Vector2(-viewWin.minX, -viewWin.minY);
                 }
                 else
                 {
-                    ourPos = new Vector2(i + viewWin.maxX, -(float)f(i)) + new Vector2(rect.X, rect.Y) - new Vector2(-viewWin.minX, -viewWin.minY);
+                    ourPos = new Vector2(i/* + viewWin.maxX*/, -(float)f(i)) + new Vector2(rect.X, rect.Y) - new Vector2(-viewWin.minX, -viewWin.minY);
                 }
                 if (rect.Contains(ourPos))
                 {
                     SpriteBatch.Draw(texture, ourPos, null, Color, (float)Math.Atan2(angle.Y, angle.X), Vector2.Zero, PixelSize, SpriteEffects.None, 0f);
+                    if (i + 1 < BoundsY)
+                    {
+                        posX2 = (i + 1) + rect.X - -viewWin.minX;
+                        posY2 = -(float)f(i+1) + rect.Y - -viewWin.minY;
+                        pos1 = ourPos;
+                        pos2 = new Vector2(posX2, posY2);
+                        distanceBetween = Vector2.Distance(ourPos, new Vector2(posX2, posY2)); // distance between current point and next point
+                        angle2 = (float)(Math.Atan2(pos2.Y - ourPos.Y, pos2.X - ourPos.X)/* - Math.Atan2(pos2.Y, pos2.X)*/); // find angle between current point and next point
+                        SpriteBatch.Draw(Main.pixelTexture, ourPos, null, Color.Red, angle2, Vector2.Zero, new Vector2(distanceBetween, 3), SpriteEffects.None, 0f);
+                    }
                 }
             }
 
