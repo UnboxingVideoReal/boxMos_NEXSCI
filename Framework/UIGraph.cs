@@ -42,6 +42,7 @@ namespace boxMos_NEXSCI.Framework
             Container = container;
             Graph = table;
 
+            spriteBatch.GraphicsDevice.ScissorRectangle = rect;
             CreateGraph(Graph, ViewingWindow, Texture, GridTexture, Rect, Angle, f, Bounds);
         }
         public void CreateGraph(List<Vector2> table, Viewport2 viewWin, Texture2D texture, Texture2D gridTexture, Rectangle rect, Vector2 angle, Func<double, double> f, Vector2 bounds)
@@ -100,7 +101,7 @@ namespace boxMos_NEXSCI.Framework
                         pos2 = new Vector2(posX2, posY2);
                         distanceBetween = Vector2.Distance(ourPos, new Vector2(posX2, posY2)); // distance between current point and next point
                         angle2 = (float)(Math.Atan2(pos2.Y - ourPos.Y, pos2.X - ourPos.X)/* - Math.Atan2(pos2.Y, pos2.X)*/); // find angle between current point and next point
-                        SpriteBatch.Draw(Main.pixelTexture, ourPos, null, Color.Red, angle2, Vector2.Zero, new Vector2(distanceBetween, 3), SpriteEffects.None, 0f);
+                        SpriteBatch.Draw(Main.pixelTexture, ourPos, null, Color.White, angle2, Vector2.Zero, new Vector2(distanceBetween, PixelSize), SpriteEffects.None, 0f);
                     }
                 }
             }

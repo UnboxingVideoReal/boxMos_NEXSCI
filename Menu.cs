@@ -19,7 +19,7 @@ namespace boxMos_NEXSCI
         SpriteBatch batch;
         ContentManager content;
         RasterizerState rasterizer;
-        int interval = 0;
+        double interval = 0;
         public Menu(SpriteBatch spriteBatch, ContentManager contentt, RasterizerState rasterizerState) 
         {
             batch = spriteBatch;
@@ -34,21 +34,28 @@ namespace boxMos_NEXSCI
         {
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, rasterizer);
 
-            interval++;
+            interval += 1;
             UIContainer container = new(batch, content, new Rectangle(0, 0, batch.GraphicsDevice.Viewport.Width, batch.GraphicsDevice.Viewport.Height), new Vector2(0, 0), "menu");
             UIRect shape = new(container, batch, content, new Rectangle(0, 0, 70, 50), new Vector2(0, 0), Color.White, "shape");
             UIImageBox image = new(container, batch, content, content.Load<Texture2D>("test"), new Rectangle(400, 0, 200, 100), new Vector2(1, 1), Color.White, "image");
             batch.End();
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, rasterizer);
             UIGraph graph = new(null, batch, content,
-                x => Math.Tan(Math.Cos(x*Math.Sin(x))+interval),
+                x => (Math.Atan((Math.Tanh(x) * Math.Sin(interval/5)*5) /5)+Math.Cos(x/5))*50,
                 new Vector2(-200,200),
                 Main.pixelTexture,
                 3f,
                 Main.pixelTexture,
-                new Viewport2(100, 100, 200, 200),
+                new Viewport2(100, 100, 100, 100),
                 new Rectangle(100, 100, 200, 200), new Vector2(0, 0), Color.White, "x^2",
                 new List<Vector2>());
         }
     }
 }
+
+
+// COOL FUNCTIONS
+
+// Math.Tan(Math.Cos(x*Math.Sin(x))+interval)
+// (1/Math.Sinh((x / 1/Math.Cos(interval))/20))*100
+// 
