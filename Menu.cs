@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,9 +28,16 @@ namespace boxMos_NEXSCI
             content = contentt;
             rasterizer = rasterizerState;
         }
+        static async Task<string> test()
+        {
+            HttpClient web = new HttpClient();
+            var response = await web.GetAsync("https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_masse,ra,dec+from+ps\r\n\r\n");
+            Debug.WriteLine("start");
+            return response.Content.ToString();
+        }
         public void Setup()
         {
-
+            Debug.WriteLine(test().Result);
         }
         public void Draw()
         {

@@ -77,7 +77,6 @@ namespace boxMos_NEXSCI.Framework
                 BoundsX = (int)float.Round(bounds.X);
                 BoundsY = (int)float.Round(bounds.Y) + 1;
             }
-            Debug.WriteLine(BoundsX.ToString() + " " + BoundsY.ToString());
 
             for (int i = BoundsX; i < BoundsY; i++) // viewWin.maxX
             {
