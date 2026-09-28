@@ -12,6 +12,7 @@ namespace boxMos_NEXSCI
         private SpriteBatch _spriteBatch;
         public static Texture2D pixelTexture;
         RasterizerState rasterizerState;
+        //public string directory;
 
         Menu menu;
         public Main()

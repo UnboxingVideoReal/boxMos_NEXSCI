@@ -11,8 +11,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection.Metadata;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace boxMos_NEXSCI
 {
@@ -28,16 +31,26 @@ namespace boxMos_NEXSCI
             content = contentt;
             rasterizer = rasterizerState;
         }
-        static async Task<string> test()
+        static async Task<string> testXml()
         {
+
             HttpClient web = new HttpClient();
-            var response = await web.GetAsync("https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_masse,ra,dec+from+ps\r\n\r\n");
+            using HttpResponseMessage response = await web.GetAsync("https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_masse,ra,dec+from+ps\r\n\r\n");
+            response.EnsureSuccessStatusCode();
+            var responseBody = response.Content.ReadAsStringAsync().ConfigureAwait(false);
             Debug.WriteLine("start");
-            return response.Content.ToString();
+            //XmlDocument doc = new XmlDocument();
+            //var iguessbro = await responseBody;
+            //doc.LoadXml(iguessbro.ToString());
+            //doc.Save(Content.RootDirectory);
+
+            Debug.WriteLine("XML DONE YAYYAY");
+            return await responseBody;
         }
-        public void Setup()
+        public async Task Setup()
         {
-            Debug.WriteLine(test().Result);
+            var wa = await testXml();
+            Debug.WriteLine(wa);
         }
         public void Draw()
         {
