@@ -2,7 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SharpDX.Direct3D9;
+using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace boxMos_NEXSCI
 {
@@ -12,13 +14,14 @@ namespace boxMos_NEXSCI
         private SpriteBatch _spriteBatch;
         public static Texture2D pixelTexture;
         RasterizerState rasterizerState;
-        //public string directory;
+        public static string directory;
 
         Menu menu;
         public Main()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Content.RootDirectory);
             IsMouseVisible = true;
         }
 
@@ -39,7 +42,6 @@ namespace boxMos_NEXSCI
 
         public void Setup()
         {
-            
 
             menu = new Menu(_spriteBatch, Content, rasterizerState);
             menu.Setup();

@@ -33,19 +33,9 @@ namespace boxMos_NEXSCI
         }
         static async Task<string> testXml()
         {
-
-            HttpClient web = new HttpClient();
-            using HttpResponseMessage response = await web.GetAsync("https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_masse,ra,dec+from+ps\r\n\r\n");
-            response.EnsureSuccessStatusCode();
-            var responseBody = response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            Debug.WriteLine("start");
-            //XmlDocument doc = new XmlDocument();
-            //var iguessbro = await responseBody;
-            //doc.LoadXml(iguessbro.ToString());
-            //doc.Save(Content.RootDirectory);
-
-            Debug.WriteLine("XML DONE YAYYAY");
-            return await responseBody;
+            string testXML = await RecolorUtils.Fetch("https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_masse,ra,dec+from+ps\r\n\r\n");
+            testXML = RecolorUtils.StringToXML("test.xml", testXML);
+            return testXML;
         }
         public async Task Setup()
         {
