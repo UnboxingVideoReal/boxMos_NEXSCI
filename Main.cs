@@ -42,7 +42,6 @@ namespace boxMos_NEXSCI
 
         public void Setup()
         {
-
             menu = new Menu(_spriteBatch, Content, rasterizerState);
             menu.Setup();
         }

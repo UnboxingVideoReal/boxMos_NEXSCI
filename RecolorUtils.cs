@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -22,8 +24,8 @@ namespace boxMos_NEXSCI
         /// </summary>
         /// <param name="name">name of the file, include .xml at the end btw. dont need to do content\\ ora nything</param>
         /// <param name="xmlstring">contents of the string youw ant to convert to xml</param>
-        /// <returns>xml string</returns>
-        public static string StringToXML(string name, string xmlstring)
+        /// <returns>xml xmldocument</returns>
+        public static XmlDocument StringToXML(string name, string xmlstring)
         {
             XmlDocument doc = new XmlDocument();
             var iguessbro = xmlstring;
@@ -37,8 +39,8 @@ namespace boxMos_NEXSCI
             }
 
 
-            Debug.WriteLine("xml " + name + " created");
-            return doc.OuterXml; 
+            Debug.WriteLine(name + " created");
+            return doc; 
         }
         /// <summary>
         /// use <see cref="HttpClient"/> to fetch a website
@@ -55,12 +57,30 @@ namespace boxMos_NEXSCI
             return await responseBody;
         }
 
-        public XDocument CreateXDocument(string path)
+        public static XDocument CreateXDocument(string path)
         {
             using (XmlReader reader = XmlReader.Create(path, new XmlReaderSettings()))
             {
                 return XDocument.Load(reader);
             }
+        }
+
+        public static string SearchInContent(string file)
+        {
+            string[] content = Directory.GetFiles(Main.directory);
+            string flippy = "0x80070002 - The system cannot find the file specified.";
+            string filePath = Path.Combine(Main.directory, file);
+            foreach (string item in content)
+            {
+                if (item == filePath)
+                {
+                    flippy = item;
+                    break;
+                }
+
+            }
+            Debug.WriteLine(flippy);
+            return flippy;
         }
 
         //public static List<T> PlotXML<T>(string path)
@@ -78,12 +98,12 @@ namespace boxMos_NEXSCI
         //        List<string> nodes = xdoc.Descendants().Select(x => x.Name.LocalName).Distinct().ToList();
 
         //        reader.MoveToContent();
-                
+
         //        while (reader.Read())
         //        {
         //            if (reader.NodeType == XmlNodeType.Element)
         //            {
-                        
+
         //            }
         //        }
         //    }

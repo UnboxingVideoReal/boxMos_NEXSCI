@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace boxMos_NEXSCI
 {
@@ -25,22 +26,28 @@ namespace boxMos_NEXSCI
         ContentManager content;
         RasterizerState rasterizer;
         double interval = 0;
+        //RecolorUtils RecolorUtils = new RecolorUtils();
         public Menu(SpriteBatch spriteBatch, ContentManager contentt, RasterizerState rasterizerState) 
         {
             batch = spriteBatch;
             content = contentt;
             rasterizer = rasterizerState;
         }
-        static async Task<string> testXml()
+        static async Task<XmlDocument> testXml()
         {
             string testXML = await RecolorUtils.Fetch("https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_masse,ra,dec+from+ps\r\n\r\n");
-            testXML = RecolorUtils.StringToXML("test.xml", testXML);
-            return testXML;
+            XmlDocument xml = RecolorUtils.StringToXML("test.xml", testXML);
+            return xml;
         }
         public async Task Setup()
         {
-            var wa = await testXml();
-            Debug.WriteLine(wa);
+            XmlDocument wa = await testXml();
+            Debug.WriteLine(wa.OuterXml);
+
+            string path = new Uri(wa.BaseURI).LocalPath; // null cuz loadxml
+            Debug.WriteLine(path);
+            XDocument xdoc = RecolorUtils.CreateXDocument(path);
+            Debug.WriteLine(xdoc.Descendants());
         }
         public void Draw()
         {
@@ -59,7 +66,7 @@ namespace boxMos_NEXSCI
                 3f,
                 Main.pixelTexture,
                 new Viewport2(100, 100, 100, 100),
-                new Rectangle(100, 100, 200, 200), new Vector2(0, 0), Color.White, "x^2",
+                new Rectangle(100, 100, 200, 200), new Vector2(0, 0), Color.White, "(tanh(x)*5sin(y/5)/5)+50cos(x/5)",
                 new List<Vector2>());
         }
     }
