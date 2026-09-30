@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace boxMos_NEXSCI
 {
@@ -20,7 +22,7 @@ namespace boxMos_NEXSCI
         /// </summary>
         /// <param name="name">name of the file, include .xml at the end btw. dont need to do content\\ ora nything</param>
         /// <param name="xmlstring">contents of the string youw ant to convert to xml</param>
-        /// <returns></returns>
+        /// <returns>xml string</returns>
         public static string StringToXML(string name, string xmlstring)
         {
             XmlDocument doc = new XmlDocument();
@@ -38,6 +40,11 @@ namespace boxMos_NEXSCI
             Debug.WriteLine("xml " + name + " created");
             return doc.OuterXml; 
         }
+        /// <summary>
+        /// use <see cref="HttpClient"/> to fetch a website
+        /// </summary>
+        /// <param name="site">site</param>
+        /// <returns>string</returns>
 
         public static async Task<string> Fetch(string site)
         {
@@ -47,5 +54,39 @@ namespace boxMos_NEXSCI
             Debug.WriteLine("fetched " + site);
             return await responseBody;
         }
+
+        public XDocument CreateXDocument(string path)
+        {
+            using (XmlReader reader = XmlReader.Create(path, new XmlReaderSettings()))
+            {
+                return XDocument.Load(reader);
+            }
+        }
+
+        //public static List<T> PlotXML<T>(string path)
+        //{
+        //    List<T> list = new List<T>();
+        //    XmlDocument doc = new XmlDocument();
+        //    doc.LoadXml(path);
+
+        //    XmlReaderSettings settings = new XmlReaderSettings();
+
+        //    using (XmlReader reader = XmlReader.Create(path, settings))
+        //    {
+        //        XDocument xdoc = XDocument.Load(reader);
+
+        //        List<string> nodes = xdoc.Descendants().Select(x => x.Name.LocalName).Distinct().ToList();
+
+        //        reader.MoveToContent();
+                
+        //        while (reader.Read())
+        //        {
+        //            if (reader.NodeType == XmlNodeType.Element)
+        //            {
+                        
+        //            }
+        //        }
+        //    }
+        //}
     }
 }
