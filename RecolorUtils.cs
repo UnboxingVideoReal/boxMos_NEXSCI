@@ -1,20 +1,23 @@
-﻿using SharpDX.MediaFoundation;
+﻿using SharpDX.Direct3D9;
+using SharpDX.MediaFoundation;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace boxMos_NEXSCI
 {
-    public class RecolorUtils
+    public static class RecolorUtils
     {
         
         public static HttpClient web = new HttpClient();
@@ -33,11 +36,11 @@ namespace boxMos_NEXSCI
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
 
-            using (XmlWriter writer = XmlWriter.Create("Content\\" + name, settings))
+            using (XmlWriter writer = XmlWriter.Create("Content\\" + name + ".xml", settings))
             {
                 doc.Save(writer);
             }
-
+            doc.Load("Content\\" + name + ".xml");
 
             Debug.WriteLine(name + " created");
             return doc; 
@@ -81,6 +84,41 @@ namespace boxMos_NEXSCI
             }
             Debug.WriteLine(flippy);
             return flippy;
+        }
+
+        public static T Convert<T>(this XElement gubby, string name) where T : notnull
+        {
+            var def = default(T);
+
+            if (gubby != null)
+            {
+                XElement? gub = gubby.Element(name);
+                if (gub != null)
+                {
+                    string value = gub.Value;
+                    if (value != null)
+                    {
+                        def = (T)System.Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
+                    }
+                }
+            }
+            return def;
+        }
+
+        public static List<T> ReadXDoc<T>(XDocument xdoc, string element) where T : notnull
+        {
+            List<T> _return = new List<T>();
+            foreach (XElement entry in xdoc.Descendants())
+            {
+                if (entry.Name.LocalName == "TR")
+                {
+                    var omg = (T)System.Convert.ChangeType(entry.Value.Trim(), typeof(T), CultureInfo.InvariantCulture);
+                    _return.Add(omg);
+                    Debug.WriteLine($"{omg}");
+                }
+            }
+            return _return;
+
         }
 
         //public static List<T> PlotXML<T>(string path)

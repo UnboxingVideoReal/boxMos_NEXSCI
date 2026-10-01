@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SharpDX.Direct3D9;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -35,8 +36,8 @@ namespace boxMos_NEXSCI
         }
         static async Task<XmlDocument> testXml()
         {
-            string testXML = await RecolorUtils.Fetch("https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_masse,ra,dec+from+ps\r\n\r\n");
-            XmlDocument xml = RecolorUtils.StringToXML("test.xml", testXML);
+            string testXML = await RecolorUtils.Fetch("https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name+from+ps");
+            XmlDocument xml = RecolorUtils.StringToXML("test", testXML);
             return xml;
         }
         public async Task Setup()
@@ -47,7 +48,9 @@ namespace boxMos_NEXSCI
             string path = new Uri(wa.BaseURI).LocalPath; // null cuz loadxml
             Debug.WriteLine(path);
             XDocument xdoc = RecolorUtils.CreateXDocument(path);
-            Debug.WriteLine(xdoc.Descendants());
+            List<string> names = RecolorUtils.ReadXDoc<string>(xdoc, "TR");
+            Debug.WriteLine(names);
+
         }
         public void Draw()
         {
