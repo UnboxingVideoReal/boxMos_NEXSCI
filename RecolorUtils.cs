@@ -17,6 +17,7 @@ using System.Xml.Serialization;
 
 namespace boxMos_NEXSCI
 {
+
     public static class RecolorUtils
     {
         
@@ -121,6 +122,25 @@ namespace boxMos_NEXSCI
 
         }
 
+        public static async Task<XmlDocument> FetchandXml(string link)
+        {
+            string testXML = await Fetch(link);
+            XmlDocument xml = StringToXML("test", testXML);
+            return xml;
+        }
+
+        public static async Task<List<T>> sFetchandRead<T>(string link, string element) where T : notnull
+        {
+            XmlDocument wa = await FetchandXml(link);
+            Debug.WriteLine(wa.OuterXml);
+
+            string path = new Uri(wa.BaseURI).LocalPath; // null cuz loadxml
+            Debug.WriteLine(path);
+            XDocument xdoc = CreateXDocument(path);
+            return ReadXDoc<T>(xdoc, element);
+
+        }
+
         //public static List<T> PlotXML<T>(string path)
         //{
         //    List<T> list = new List<T>();
@@ -148,3 +168,23 @@ namespace boxMos_NEXSCI
         //}
     }
 }
+
+
+
+// THE XML PROCESS:
+/*          XmlDocument wa = await testXml();
+            Debug.WriteLine(wa.OuterXml);
+
+            string path = new Uri(wa.BaseURI).LocalPath; // null cuz loadxml
+            Debug.WriteLine(path);
+            XDocument xdoc = RecolorUtils.CreateXDocument(path);
+            List<string> names = RecolorUtils.ReadXDoc<string>(xdoc, "TR");
+            Debug.WriteLine(names);
+*/
+
+// * first, load the XmlDocument from FetchandXml(link)
+// * then, save the uri.localpath to var
+// * createxdocument(path)
+// * readxdoc<T>(xdoc, element)
+
+// OR: use sFetchandRead<T>(link) - easy!

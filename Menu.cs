@@ -34,15 +34,9 @@ namespace boxMos_NEXSCI
             content = contentt;
             rasterizer = rasterizerState;
         }
-        static async Task<XmlDocument> testXml()
-        {
-            string testXML = await RecolorUtils.Fetch("https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name+from+ps");
-            XmlDocument xml = RecolorUtils.StringToXML("test", testXML);
-            return xml;
-        }
         public async Task Setup()
         {
-            XmlDocument wa = await testXml();
+            XmlDocument wa = await RecolorUtils.FetchandXml("https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name+from+ps");
             Debug.WriteLine(wa.OuterXml);
 
             string path = new Uri(wa.BaseURI).LocalPath; // null cuz loadxml
