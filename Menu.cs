@@ -36,15 +36,8 @@ namespace boxMos_NEXSCI
         }
         public async Task Setup()
         {
-            XmlDocument wa = await RecolorUtils.FetchandXml("https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name+from+ps");
-            Debug.WriteLine(wa.OuterXml);
-
-            string path = new Uri(wa.BaseURI).LocalPath; // null cuz loadxml
-            Debug.WriteLine(path);
-            XDocument xdoc = RecolorUtils.CreateXDocument(path);
-            List<string> names = RecolorUtils.ReadXDoc<string>(xdoc, "TR");
-            Debug.WriteLine(names);
-
+            List<string> testRead = await RecolorUtils.sFetchandRead<string>("https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name+from+ps", "TR");
+            Debug.WriteLine(testRead[0]);
         }
         public void Draw()
         {

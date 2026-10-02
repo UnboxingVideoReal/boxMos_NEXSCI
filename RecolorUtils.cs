@@ -93,7 +93,7 @@ namespace boxMos_NEXSCI
 
             if (gubby != null)
             {
-                XElement? gub = gubby.Element(name);
+                var gub = gubby.Element(name);
                 if (gub != null)
                 {
                     string value = gub.Value;
@@ -111,11 +111,10 @@ namespace boxMos_NEXSCI
             List<T> _return = new List<T>();
             foreach (XElement entry in xdoc.Descendants())
             {
-                if (entry.Name.LocalName == "TR")
+                if (entry.Name.LocalName == element)
                 {
                     var omg = (T)System.Convert.ChangeType(entry.Value.Trim(), typeof(T), CultureInfo.InvariantCulture);
                     _return.Add(omg);
-                    Debug.WriteLine($"{omg}");
                 }
             }
             return _return;
@@ -132,10 +131,10 @@ namespace boxMos_NEXSCI
         public static async Task<List<T>> sFetchandRead<T>(string link, string element) where T : notnull
         {
             XmlDocument wa = await FetchandXml(link);
-            Debug.WriteLine(wa.OuterXml);
+            //Debug.WriteLine(wa.OuterXml);
 
             string path = new Uri(wa.BaseURI).LocalPath; // null cuz loadxml
-            Debug.WriteLine(path);
+            //Debug.WriteLine(path);
             XDocument xdoc = CreateXDocument(path);
             return ReadXDoc<T>(xdoc, element);
 
