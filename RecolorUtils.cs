@@ -121,52 +121,68 @@ namespace boxMos_NEXSCI
 
         }
 
-        public static async Task<XmlDocument> FetchandXml(string link)
+        public static async Task<XmlDocument> FetchandXml(string name, string link)
         {
             string testXML = await Fetch(link);
-            XmlDocument xml = StringToXML("test", testXML);
+            XmlDocument xml = StringToXML(name, testXML);
             return xml;
         }
 
-        public static async Task<List<T>> sFetchandRead<T>(string link, string element) where T : notnull
+        public static string PathXml(XmlDocument xml)
         {
-            XmlDocument wa = await FetchandXml(link);
+            return new Uri(xml.BaseURI).LocalPath;
+        }
+
+        public static async Task<List<T>> sFetchandRead<T>(string name, string link, string element) where T : notnull
+        {
+            XmlDocument wa = await FetchandXml(name, link);
             //Debug.WriteLine(wa.OuterXml);
 
-            string path = new Uri(wa.BaseURI).LocalPath; // null cuz loadxml
+            string path = PathXml(wa); // null cuz loadxml
             //Debug.WriteLine(path);
             XDocument xdoc = CreateXDocument(path);
             return ReadXDoc<T>(xdoc, element);
 
         }
 
-        //public static List<T> PlotXML<T>(string path)
-        //{
-        //    List<T> list = new List<T>();
-        //    XmlDocument doc = new XmlDocument();
-        //    doc.LoadXml(path);
+        public static async Task<XDocument> sFetchandXDoc(string name, string link)
+        {
+            XmlDocument wa = await FetchandXml(name, link);
+            //Debug.WriteLine(wa.OuterXml);
 
-        //    XmlReaderSettings settings = new XmlReaderSettings();
+            string path = PathXml(wa); // null cuz loadxml
+            //Debug.WriteLine(path);
+            return CreateXDocument(path);
+        }
 
-        //    using (XmlReader reader = XmlReader.Create(path, settings))
-        //    {
-        //        XDocument xdoc = XDocument.Load(reader);
 
-        //        List<string> nodes = xdoc.Descendants().Select(x => x.Name.LocalName).Distinct().ToList();
+            //public static List<T> PlotXML<T>(string path)
+            //{
+            //    List<T> list = new List<T>();
+            //    XmlDocument doc = new XmlDocument();
+            //    doc.LoadXml(path);
 
-        //        reader.MoveToContent();
+            //    XmlReaderSettings settings = new XmlReaderSettings();
 
-        //        while (reader.Read())
-        //        {
-        //            if (reader.NodeType == XmlNodeType.Element)
-        //            {
+            //    using (XmlReader reader = XmlReader.Create(path, settings))
+            //    {
+            //        XDocument xdoc = XDocument.Load(reader);
 
-        //            }
-        //        }
-        //    }
-        //}
+            //        List<string> nodes = xdoc.Descendants().Select(x => x.Name.LocalName).Distinct().ToList();
+
+            //        reader.MoveToContent();
+
+            //        while (reader.Read())
+            //        {
+            //            if (reader.NodeType == XmlNodeType.Element)
+            //            {
+
+            //            }
+            //        }
+            //    }
+            //}
+        }
     }
-}
 
 
 

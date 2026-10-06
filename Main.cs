@@ -35,11 +35,18 @@ namespace boxMos_NEXSCI
             pixelTexture = Content.Load<Texture2D>("pixel");
             rasterizerState = new RasterizerState() { ScissorTestEnable = true };
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            //ClearXmls();
             Setup();
             // TODO: use this.Content to load your game content here
         }
 
+        public void ClearXmls()
+        {
+            foreach (string file in Directory.EnumerateFiles(directory, "*.xml", SearchOption.TopDirectoryOnly))
+            {
+                File.Delete(file);
+            }
+        }
         public void Setup()
         {
             menu = new Menu(_spriteBatch, Content, rasterizerState);

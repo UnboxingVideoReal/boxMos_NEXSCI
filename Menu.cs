@@ -34,10 +34,14 @@ namespace boxMos_NEXSCI
             content = contentt;
             rasterizer = rasterizerState;
         }
+        public async Task PreloadXmls()
+        {
+            XDocument pscomppars = await RecolorUtils.sFetchandXDoc("pscomppars", "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+pscomppars");
+        }
         public async Task Setup()
         {
-            List<string> testRead = await RecolorUtils.sFetchandRead<string>("https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name+from+ps", "TR");
-            Debug.WriteLine(testRead[0]);
+            await PreloadXmls();
+            //Debug.WriteLine(testRead[0]);
         }
         public void Draw()
         {
