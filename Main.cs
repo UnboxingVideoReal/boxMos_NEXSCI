@@ -5,6 +5,8 @@ using SharpDX.Direct3D9;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace boxMos_NEXSCI
 {
@@ -35,9 +37,14 @@ namespace boxMos_NEXSCI
             pixelTexture = Content.Load<Texture2D>("pixel");
             rasterizerState = new RasterizerState() { ScissorTestEnable = true };
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            PreloadXmls();
             //ClearXmls();
             Setup();
             // TODO: use this.Content to load your game content here
+        }
+        public async Task PreloadXmls()
+        {
+            XDocument pscomppars = await RecolorUtils.sFetchandXDoc("pscomppars", "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+pscomppars");
         }
 
         public void ClearXmls()
